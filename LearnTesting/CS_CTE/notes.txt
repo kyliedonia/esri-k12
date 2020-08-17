@@ -1,0 +1,14 @@
+Instead of looking at data in tables and graphs, connect it with the geospatial. Use industry best practices like mobile friendly and build sites 
+Build skills in problem solving, creative, tackle challenges
+
+build the tools and applications people use
+visual rep of spatial data
+richer story of the information behind the data
+take geospatial data, add code, and make interactive maps and experiences with targetted experiences (in a web page or an app)
+solve hard problems and have ah ha moments where things click and you made an application or site behave as you'd expect
+interested in coding? Just keep building things and learn through experimenting/failure
+hands-on experience making programs
+soft skills like collaborate, problem solve
+challenged and creative every day
+
+

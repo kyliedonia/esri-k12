@@ -1,0 +1,55 @@
+/*
+var host = "http://marketplacedevext.arcgis.com",
+    searchHost = "http://searchdev.esri.com",
+*/
+
+var searchHost = "//searchdev.esri.com",
+	_agolHost = "//www.arcgis.com",
+	trialUrl = "//learndev.arcgis.com";
+	billingHost = "https://billingdev.arcgis.com";
+	aemHost = "https://aem-dev.esri.com";
+	_downloadUrl = "https://downloads.arcgis.com/dms/rest/update/secured/";
+if(window.location.hostname.match( /(learnstg.arcgis.com)/)) {
+	searchHost = "//searchstg.esri.com";
+	_agolHost = "//qaext.arcgis.com";
+	trialUrl = "https://learnstg.arcgis.com";
+	billingHost = "https://billingqa.arcgis.com";
+	aemHost = "https://aem-qa.esri.com";
+	_downloadUrl = "https://downloadsqa.arcgis.com/dms/rest/update/secured/";
+} else if(window.location.hostname.match( /(learn.arcgis.com)/)) {
+	searchHost = "//search.esri.com";
+	_agolHost = "//www.arcgis.com";
+	trialUrl = "https://learn.arcgis.com";
+	billingHost = "https://billing.arcgis.com";
+	aemHost = "https://www.esri.com";
+	_downloadUrl = "https://downloads.arcgis.com/dms/rest/update/secured/";
+}
+
+    //searchHost = "http://search.esri.com",
+    sitecfg = {
+	  	"debug" : false,
+
+        "portalHostname" : _agolHost,
+		"agolSignin" : 	_agolHost + "/home/signin.html",
+		"agolSignout" : 	"/sharing/rest/oauth2/signout",
+		"agolProfile" :  "/home/user.html",
+		"trialDownloadUrl": trialUrl + "/en/trial/",
+		"securedDownloadUrl": _downloadUrl,
+
+		"searchUrl" : searchHost + "/v3/index.cfm",
+		"searchIfc" : "arcgis_pro_ifce",
+	  	"searchView" : "arcgis_desktop_vw",
+	  	"billingURL" : billingHost + "/services/rest/learn/signup",
+		"contributorFormURL": aemHost + "/en-us/landing-page/lp/learnarcgis-contributor-form",
+	  	"userInfo":{
+	  		"userName": null,
+	  		"subscriptionInfo":null
+	  	},
+			"learnSubscriptionId": "5136708044",
+			"learnSubscriptionId2": "9570547252"
+	};
+
+	window.onload = function () {
+	  // Initialize all calcite.js patterns
+	  calcite.init();
+	};

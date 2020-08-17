@@ -1,0 +1,20 @@
+function getUrlLang() {
+    var loc = window.location,
+        path = loc.pathname,
+        lg = path.split ("/")[1].toLowerCase();
+    if (lg in GLangLabels) {
+        return lg;
+    } else {
+        return "en";
+    }
+}
+$(document).ready(function() {
+  var curLang = getUrlLang();
+  $('a.top-nav-link[href="/'+curLang+'/support/"]').text('Teach with GIS').attr('href', '/en/educators/');
+  $('a.side-nav-link[href="/'+curLang+'/support/"]').text('Teach with GIS').attr('href', '/en/educators/');
+  $('footer nav a[data-langlabel="support"]').parent('li').remove();
+  $('#learn-more').wrap('<div class="panel panel-no-border panel-no-padding panel-dark"></div>');
+  if (window.location.href.indexOf("esripress") == -1) {
+    $('.top-nav-list').last().after('<nav class="top-nav-list right" role="navigation" aria-labelledby="usernav"><a class="btn margin-right-1 learn-beta-btn tooltip tooltip-multiline" aria-label="Try out the new Learn ArcGIS beta. \n You can learn at your own pace based on your individual needs and interests." href="https://learn-arcgis-learngis.hub.arcgis.com/">Learn ArcGIS beta</a></nav>');
+  }
+});

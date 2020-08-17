@@ -1,0 +1,160 @@
+$(document).ready(function() {
+	
+  var loc = window.location,
+    path = loc.pathname,
+    lg = path.split("/")[1].toLowerCase();
+	
+	var dict = (window.localeJsonObj || {})[lg];
+
+	  if (dict) {
+		  $("*[data-langlabel]").each (function(i) {
+			  var o = $(this),
+				  txt = dict[o.attr("data-langlabel")];
+
+			  if (this.tagName === "INPUT" || this.tagName === "input") {
+				  o.val (txt);
+			  }
+			  if (txt) {
+				  o.html (txt);
+			  }
+		  });
+	  }
+	  
+  $('html').attr('lang', lg);
+  if (lg != 'en') {
+    $('.breadcrumbs a').each(function() {
+      var href = $(this).attr('href').replace('/en/', '/' + lg + '/');
+      $(this).attr('href', href);
+    });
+  }
+  dir = window.location.pathname.match(/([^\\\/]*)\/?$/);
+  if (dir[1] != 'undefined') {
+    slug = dir[1];
+  }
+  $.getJSON("/cdn/card-catalog/json/" + lg + "/playlists.json", function(data) {
+    var id = false;
+    var items = [];
+    $.each(data, function(key, val) {
+      if (val['slug'] == slug) {
+        id = val['id'];
+        if (val['bannerImageUrl'] != "") {
+          document.getElementById('path_banner').setAttribute('style', "background-image:linear-gradient(45deg,rgba(0,0,0,0.85),rgba(0,0,0,0)),url('" + val['bannerImageUrl'] + "')");
+        }
+        document.title = val['title'];
+        document.getElementById('path_title').innerHTML = val['short_title'];
+        //document.getElementById('path_time').innerHTML = parse_duration(val['duration']);
+        document.getElementById('path_description').innerHTML = val['description'];
+        //document.getElementById('path_contributor_image').src = '/cdn/card-catalog/uploads/users/' + val['contributorImage'];
+        //document.getElementById('path_contributor_description').innerHTML = val['contributorDescription'];
+        //document.getElementById('path_contributor_name').innerHTML = val['contributorName'];
+        $.getJSON("/cdn/card-catalog/json/" + lg + "/" + id + ".json", function(path_data) {
+          var a = [];
+          if('cards' in path_data){
+            card_data = path_data['cards'];
+          }else{
+            card_data = path_data;
+          }
+          $.each(card_data, function(card_key, card_val) {
+            // console.log(card_val['typeName']);
+            typeNameTag = (card_val['type'] == 'article') ? '<li class="blog-english-only" data-langlabel="english-only">English Only</li>' : '';
+            a.push('<div class="path-card">' +
+              '<div class="path-card-bg"></div>' +
+              '<div class="path-card-wrap">' +
+              '<a class="path-card-image-wrap" style="background-image:url(\'' + card_val['imageUrl'] + '\')" href="' + card_val['url'] + '"></a>' +
+              '<div class="path-card-content">' +
+              '<h4 class="trailer-half"><a href="' + card_val['url'] + '">' + card_val['title'] + '</a></h4>' +
+              '<p class="font-size--1 cye-lm-tag">' + card_val['description'] + '</p>' +
+              '<ul class="list-plain">' +
+              '<li class="font-size--2 icon-ui-time-clock">' + parse_duration(card_val['duration']) + '</li>' +
+              '<li class="font-size--2 icon-ui-globe">' + card_val['typeName'] + '</li>' +
+              typeNameTag +
+              '</ul>' +
+              '</div>' +
+              '</div>' +
+              '</div>');
+          });
+          document.getElementById('path-cards').innerHTML = a.join("");
+          if('related_items' in path_data && document.getElementById("related_items")){
+            var r = [];
+            show_related_items = false;
+            $.each(path_data['related_items'], function(item_key, item_val) {
+              show_related_items = true;
+              r.push('<div class="card block trailer-1">' +
+                '<figure class="card-image-wrap">' +
+                '<a href="' + item_val['url'] + '" class="card-image">' +
+                '<img alt="" title="" err-src="//via.placeholder.com/500x375?text=Missing+Image" src="' + item_val['imageUrl'] + '">' +
+                '</a>' +
+                '<div class="card-type" style="margin-top:-0.45rem;background-color:aliceblue;text-transform:uppercase;font-size:14px;text-align:right;padding-right:1rem;">' + item_val['typeName'] + '</div>' +
+                '</figure>' +
+                '<div class="card-content" style="padding-top:0.5rem;">' +
+                '<a href="' + item_val['url'] + '">' + '<h5 class="trailer-0">' + item_val['title'] + '</h5>' + '</a>' +
+                '<p class="font-size--3 trailer-0">' + item_val['description'] + '</p>' +
+                '</div>' +
+                '</div>');
+            });
+            if(show_related_items){
+              document.getElementById('related_items_cards').innerHTML = r.join("");
+              document.getElementById('related_items').style.display = 'block';
+            }
+          }
+        });
+        return false;
+      }
+    });
+    if (id == false) {
+      $("body").load("/404/index.html");
+    }
+  });
+  //$('.lang-block').hide();
+  if(lg != 'en'){
+    jQuery('a[target^="_new"]').hide();
+  }else{
+    jQuery('a[target^="_new"]').click(function() {
+      if($(this)[0].hasAttribute("target-width")){
+        var width = $(this).attr("target-width");
+      }else{
+        var width = 555;
+      }
+      if($(this)[0].hasAttribute("target-height")){
+        var height = $(this).attr("target-height");
+      }else{
+        var height = 369;
+      }
+      console.log(width);
+      console.log(height);
+      // Ratio the hight to the width as the user screen ratio
+      window.open(this.href , 'newwindow', 'width=' + width + ', height=' + height + ', top=' + ((window.innerHeight - height) / 2) + ', left=' + ((window.innerWidth - width) / 2));
+      return false;
+    });
+  }
+});
+
+function parse_duration(dur_mins) {
+  /*var duration = {
+    days: 0,
+    hr: 0,
+    min: dur_mins
+  };*/
+  var duration = {
+         hr: 0,
+         min: dur_mins
+  };
+  hour = 60;
+  //day = hour * 8;
+  /*if (duration['min'] >= day) {
+    duration['days'] = Math.floor(duration['min'] / day);
+    duration['min'] = duration['min'] % day;
+  }*/
+  if (duration['min'] >= hour) {
+    duration['hr'] = Math.floor(duration['min'] / hour);
+    duration['min'] = duration['min'] % hour;
+  }
+  return_string = '';
+  for (k in duration) {
+    if (duration[k] > 0) {
+      return_string += duration[k] + " " + k + " ";
+    }
+  }
+  return return_string;
+}
+;
