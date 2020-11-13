@@ -1,0 +1,6 @@
+﻿Email,First Name,Last Name,Username,Password,User Type,Role,Teacher/Student
+kdonia@esri.com,KD_Test01,TEST,studentTest01_k12,Scramble.1,Creator,Publisher,Student
+kdonia@esri.com,KD_Test02,TEST,studentTest02_k12,Scramble.1,Creator,Publisher,Student
+kdonia@esri.com,KD_Test03,TEST,studentTest03_k12,Scramble.1,GIS Professional Advanced,Publisher,Student
+kdonia@esri.com,KD_Test04,TEST,studentTest04_k12,Scramble.1,GIS Professional Advanced,Publisher,Student
+kdonia@esri.com,KD_Teacher_TEST,TEST,lastnameTest_k12,Scramble.1,GIS Professional Advanced,Administrator,Teacher
