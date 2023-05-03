@@ -2,6 +2,9 @@
   <head>
     <title>Comparison of apps for working with maps</title>
     <style>
+      table {
+        margin:35px 35px 10px 35px;
+      }
       table, th, td {
         border-collapse: collapse;
       }
@@ -14,6 +17,9 @@
       td.header {        
         text-align: left;
       }
+      td.wideheader {
+        background-color:#fff2cc;
+      }
       th {
         background-color: #ffd966;   /*grays: #f5f5f5, light was #fafafa */
       }
@@ -22,7 +28,7 @@
   </head> 
   
   <body>
-    <table style="margin:35px;">
+    <table>
       <tr>
         <td style="border: 0px;"></td>
         <th><a href="https://esriurl.com/mapmaker">MapMaker</a></th>
@@ -31,7 +37,7 @@
         <th><a href="https://www.arcgis.com/home/webscene/viewer.html">Scene Viewer</a></th>
       </tr>
       <tr>
-        <td  class="header" colspan="6" style="background-color:#fff2cc;"><i>Maps and data</i></td>
+        <td class="header wideheader" colspan="6" style=""><i>Maps and data</i></td>
       </tr>
       <tr>
         <td class="header">2D</td>
@@ -55,7 +61,7 @@
         <td></td>
       </tr>
       <tr>
-        <td class="header" colspan="6" style="background-color:#fff2cc;"><i>Map use</i></td>
+        <td class="header wideheader" colspan="6"><i>Map use</i></td>
       </tr>   
       <tr>
         <td class="header">Basic digital map tools (pan/zoom, layer visibility, change basemap, legend)</td>
@@ -163,7 +169,7 @@
         <td></td>
       </tr>
       <tr>
-        <td class="header" colspan="6" style="background-color:#fff2cc;"><i>Map authoring</i></td>
+        <td class="header wideheader" colspan="6"><i>Map authoring</i></td>
       </tr>     
       <tr>
         <td class="header">Add layers</td>
@@ -194,7 +200,7 @@
         <td><span class="icon-ui-check-mark icon-ui-green"></span></td>
       </tr> 
       <tr>
-        <td class="header" colspan="6" style="background-color:#fff2cc;"><i>Analysis</i></td>
+        <td class="header wideheader" colspan="6"><i>Analysis</i></td>
       </tr>     
       <tr>
         <td class="header">Add analysis layers</td>
@@ -211,7 +217,9 @@
         <td></td>
       </tr>       
     </table>
-    
+      
+    <div style="text-align:center; font-size:80%";><span class="icon-ui-check-mark icon-ui-green">Available now</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="icon-ui-loading-indicator icon-ui-yellow">Planned</span></div>
+
     <script src="https://s3-us-west-1.amazonaws.com/patterns.esri.com/files/calcite-web/1.2.5/js/calcite-web.min.js"></script>
   </body>
   
