@@ -8,11 +8,14 @@
       background-repeat: no-repeat; /* Prevents image from repeating */
       background-size: cover; /* Scales the image to cover the entire background */
       background-attachment: fixed; /* Keeps the background image fixed when scrolling */
-    }
-    .message {
+
+      font-size: 150%;
       color: white;
-      text-shadow: 2px 0 #6b7b43, -2px 0 #6b7b43, 0 2px #6b7b43, 0 -2px #6b7b43,
-                   1px 1px #6b7b43, -1px -1px #6b7b43, 1px -1px #6b7b43, -1px 1px #6b7b43;   /* old lighter green: 3AA4E */
+      text-shadow: 2px 0 #293D2C, -2px 0 #293D2C, 0 2px #293D2C, 0 -2px #293D2C,
+                   1px 1px #293D2C, -1px -1px #293D2C, 1px -1px #293D2C, -1px 1px #293D2C;   /* old lighter green: 3AA4E; med green: 45673F */ 
+    }
+    
+    .message {
       font-size: 150%;
       margin: 40px;
       padding: 50px;
@@ -21,6 +24,7 @@
       box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
     }
     .message a { text-shadow: none;}
+    
     .overlay {
       position: absolute;
       top: 0;
@@ -48,7 +52,6 @@
       color: #293D2C;
       border: 2px solid #293D2C;
     }
-
     .button:hover {
       background-color: #D9AA53;
       color: white;
@@ -62,6 +65,21 @@
       display: block;
       margin: auto;
     }
+
+    ul {
+      list-style-type: none;
+      color: white;
+    }
+    ul li{
+      position:relative;
+    }
+    ul li:before{
+      content: '\2022';
+      position:absolute;
+      right:100%;
+      margin-right:0.5em;
+      color: white;
+  }
   </style>
 </head>
 <body>
