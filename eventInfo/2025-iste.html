@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Thanks for visiting with Esri</title>
+</head>
+<body>
+
+<p>Thanks for visiting with Esri at ISTE! Learn more about our Schools program at <a href="https://esri.com/schools">https://esri.com/schools</a>.</p>
+
+<p>Explore these flyers to see what we offer for your classroom:</p>
+<ul>
+  <li><a href="https://link.esri.com/ISTE25/mapmaker">MapMaker flyer</a></li>
+  <li><a href="hhttps://link.esri.com/ISTE25/science">Science flyer</a></li>
+  <li><a href="https://link.esri.com/ISTE25/cte">CTE flyer</a></li>
+</ul>
+
+<p>Questions? <a href="mailto:schools@esri.com?subject=K-12 mapping resources (ISTE)">Email us.</a></p>
+
+<script>
+window.onload = function() {
+  var email = "";
+  var subject = "K-12 mapping resources (ISTE)";
+  var body = "Thanks for visiting with Esri at ISTE! Learn more about our Schools program at https://esri.com/schools.%0D%0A %0D%0AExplore these flyers to see what we offer for your classroom:%0D%0A %E2%80%A2 MapMaker: https://link.esri.com/ISTE25/mapmaker%0D%0A %E2%80%A2 Science: https://link.esri.com/ISTE25/science%0D%0A %E2%80%A2 CTE: https://link.esri.com/ISTE25/cte%0D%0A %0D%0A Questions? Email us: schools@esri.com";
+
+  window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + (body);    //encodeURIComponent(body)
+}
+</script>
+</body>
+</html>
