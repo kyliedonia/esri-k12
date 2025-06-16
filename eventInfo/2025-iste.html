@@ -1,10 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Thanks for visiting with Esri</title>
+  <title>Thanks for visiting with Esri</title>
+  <style>
+    body {
+      background-image: url("background-map.jpg"); 
+      background-repeat: no-repeat; /* Prevents image from repeating */
+      background-size: cover; /* Scales the image to cover the entire background */
+      background-attachment: fixed; /* Keeps the background image fixed when scrolling */
+    }
+    .message {
+      color: white;
+      text-shadow: 2px 0 #93AA4E, -2px 0 #93AA4E, 0 2px #93AA4E, 0 -2px #93AA4E,
+                   1px 1px #93AA4E, -1px -1px #93AA4E, 1px -1px #93AA4E, -1px 1px #93AA4E;
+      font-size: 150%;
+      margin: 40px;
+      padding: 50px;
+      background-color: rgba(255, 255, 255, 0.35);
+      border-radius: 50px;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    }
+    .message a { text-shadow: none;}
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(147, 170, 78, 0.25); /* Semi-transparent overlay. (green: 147, 170, 78 = #93AA4E) (white: 255, 255, 255) */
+    }
+
+    .button {
+      border: none;
+      border-radius:15px;
+      color: white;
+      padding: 16px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
+      background-color: #CFCE59;
+      color: #293D2C;
+      border: 2px solid #293D2C;
+    }
+
+    .button:hover {
+      background-color: #D9AA53;
+      color: white;
+    }
+    
+    .logo {
+      width: 20%;
+      max-width: 250px;
+      min-width: 150px;
+      height: auto;
+      display: block;
+      margin: auto;
+    }
+  </style>
 </head>
 <body>
-
+<div class="container">
+<div class="overlay">
+<div class="message">
+<img class="logo" src="esri-18globelogo-tag-below-1CRev.png"/>
+<h1>Info to go</h1>
 <p>Thanks for visiting with Esri at ISTE! Learn more about our Schools program at <a href="https://esri.com/schools">https://esri.com/schools</a>.</p>
 
 <p>Explore these flyers to see what we offer for your classroom:</p>
@@ -14,15 +79,21 @@
   <li><a href="https://link.esri.com/ISTE25/cte">CTE flyer</a></li>
 </ul>
 
-<p>Questions? <a href="mailto:schools@esri.com?subject=K-12 mapping resources (ISTE)">Email us.</a></p>
+<p>Questions? Email us at <a href="mailto:schools@esri.com?subject=K-12 mapping resources (ISTE)">schools@esri.com</a>.</p><p>&nbsp; </p>
+<button class="button" onClick="generateEmail()">Click here to email yourself these resources to review later.</button>
+</div></div></div>
 
 <script>
 window.onload = function() {
+  generateEmail();
+}
+
+function generateEmail() {
   var email = "";
   var subject = "K-12 mapping resources (ISTE)";
   var body = "Thanks for visiting with Esri at ISTE! Learn more about our Schools program at https://esri.com/schools.%0D%0A %0D%0AExplore these flyers to see what we offer for your classroom:%0D%0A %E2%80%A2 MapMaker: https://link.esri.com/ISTE25/mapmaker%0D%0A %E2%80%A2 Science: https://link.esri.com/ISTE25/science%0D%0A %E2%80%A2 CTE: https://link.esri.com/ISTE25/cte%0D%0A %0D%0A Questions? Email us: schools@esri.com";
 
-  window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + (body);    //encodeURIComponent(body)
+   window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + (body);    //encodeURIComponent(body)
 }
 </script>
 </body>
