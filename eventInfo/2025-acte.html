@@ -91,15 +91,15 @@
 <h1>Info to go</h1>
 <p>Thanks for visiting with Esri at ACTE! Learn more about our Schools program at <a href="https://esri.com/schools">https://esri.com/schools</a>.</p>
 
-<P>Find GIS resources for your CTE classroom on the <a href="https://link.esri.com/ACTE-25/cte">CTE Instructors page</a>.
+<P>Find GIS resources for your CTE classroom on the <a href="https://link.esri.com/acte-25/cte">CTE Instructors page</a>.
   
 <p>Explore these flyers to see what we offer for your classroom:</p>
 <ul>
-  <li><a href="https://link.esri.com/ACTE-25/cte">CTE flyer</a></li>
-  <li><a href="https://link.esri.com/ACTE-25/sci">Science & STEM flyer</a></li>
+  <li><a href="https://link.esri.com/acte-25/cteFlyer">CTE flyer</a></li>
+  <li><a href="https://link.esri.com/acte-25/sciFlyer">Science & STEM flyer</a></li>
 </ul>
 
-<p>Questions? Email us at <a href="mailto:schools@esri.com?subject=K-12 mapping resources (ACTE)">schools@esri.com</a>.</p><p>&nbsp; </p>
+<p>Questions? Email us at <a href="mailto:schools@esri.com?subject=GIS Skills for Career Readiness (ACTE)">schools@esri.com</a>.</p><p>&nbsp; </p>
 <button class="button" onClick="generateEmail()">Click here to email yourself these resources to review later.</button>
 </div></div></div>
 
@@ -110,8 +110,8 @@ window.onload = function() {
 
 function generateEmail() {
   var email = "";
-  var subject = "K-12 mapping resources (ACTE)";
-  var body = "Thanks for visiting with Esri at ACTE! Learn more about our Schools program at https://esri.com/schools.%0D%0A %0D%0AFind GIS resources for your CTE classroom on the CTE Instructores page: https://link.esri.com/ACTE-25/cte. %0D%0A %0D%0AExplore these flyers to see what we offer for your classroom:%0D%0A %E2%80%A2 CTE flyer: https://link.esri.com/ACTE-25/cte%0D%0A %E2%80%A2 Science &amp; STEM flyer: https://link.esri.com/ACTE-25/sci%0D%0A %0D%0A Questions? Email us: schools@esri.com";
+  var subject = "GIS Skills for Career Readiness (ACTE)";
+  var body = "Thanks for visiting with Esri at ACTE! Learn more about our Schools program at https://esri.com/schools.%0D%0A %0D%0AFind GIS resources for your CTE classroom on the CTE Instructors page: https://link.esri.com/acte-25/cte. %0D%0A %0D%0AExplore these flyers to see what we offer for your classroom:%0D%0A %E2%80%A2 CTE flyer: https://link.esri.com/acte-25/cteFlyer%0D%0A %E2%80%A2 Science %26 STEM flyer: https://link.esri.com/acte-25/sciFlyer%0D%0A %0D%0A Questions? Email us: schools@esri.com";
 
    window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + (body);    //encodeURIComponent(body)
 }
