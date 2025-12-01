@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Thanks for visiting with Esri</title>
+      <style>
+    body {
+      background-image: url("./background-map-small.jpg"); 
+      background-repeat: no-repeat; /* Prevents image from repeating */
+      background-size: cover; /* Scales the image to cover the entire background */
+      background-attachment: fixed; /* Keeps the background image fixed when scrolling */
+
+      font-size: 150%;
+      font-weight: 600;
+      color: #293D2C; /*white;*/
+      text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
+                   1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;    /* old lighter green: 3AA4E; med green: 45673F */ 
+      /*text-shadow: 2px 0 #293D2C, -2px 0 #293D2C, 0 2px #293D2C, 0 -2px #293D2C,
+                   1px 1px #293D2C, -1px -1px #293D2C, 1px -1px #293D2C, -1px 1px #293D2C; */   /* old lighter green: 3AA4E; med green: 45673F */
+
+    }
+
+    .message {
+      margin: 40px;
+      padding: 50px;
+      background-color: rgba(245, 233, 215, 0.7);  /* 194, 175, 144*/
+      border-radius: 50px;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    }
+    .message a { text-shadow: none;}
+    
+    /*.overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(147, 170, 78, 0.25); 
+    } */
+
+    .button {
+      border: none;
+      border-radius:15px;
+      color: white;
+      padding: 16px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      transition-duration: 0.4s;
+      cursor: pointer;
+      box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+
+      background-color: #CFCE59;
+      color: #293D2C;
+      border: 2px solid #293D2C;
+    }
+    .button:hover {
+      background-color: #D9AA53;
+    }
+    
+    .logo {
+      width: 20%;
+      max-width: 250px;
+      min-width: 150px;
+      height: auto;
+      display: block;
+      margin: auto;
+    }
+
+    ul {
+      list-style-type: none;
+    }
+    ul li{
+      position:relative;
+    }
+    ul li:before{
+      content: '\2022';
+      position:absolute;
+      right:100%;
+      margin-right:0.5em;
+      color: #293D2C;
+  }
+  </style>
+</head>
+<body>
+<div class="container">
+<div class="overlay">
+<div class="message">
+<img class="logo" src="./esri-18globelogo-tag-below-1CRev.png"/>
+<h1>Info to go</h1>
+<p>Thanks for visiting with Esri at ACTE! Learn more about our Schools program at <a href="https://esri.com/schools">https://esri.com/schools</a>.</p>
+
+<P>Find GIS resources for your CTE classroom on the <a href="https://link.esri.com/ACTE-25/cte">CTE Instructors page</a>.
+  
+<p>Explore these flyers to see what we offer for your classroom:</p>
+<ul>
+  <li><a href="https://link.esri.com/ACTE-25/cte">CTE flyer</a></li>
+  <li><a href="https://link.esri.com/ACTE-25/sci">Science & STEM flyer</a></li>
+</ul>
+
+<p>Questions? Email us at <a href="mailto:schools@esri.com?subject=K-12 mapping resources (ACTE)">schools@esri.com</a>.</p><p>&nbsp; </p>
+<button class="button" onClick="generateEmail()">Click here to email yourself these resources to review later.</button>
+</div></div></div>
+
+<script>
+window.onload = function() {
+  generateEmail();
+}
+
+function generateEmail() {
+  var email = "";
+  var subject = "K-12 mapping resources (ACTE)";
+  var body = "Thanks for visiting with Esri at ACTE! Learn more about our Schools program at https://esri.com/schools.%0D%0A %0D%0AFind GIS resources for your CTE classroom on the CTE Instructores page: https://link.esri.com/ACTE-25/cte. %0D%0A %0D%0AExplore these flyers to see what we offer for your classroom:%0D%0A %E2%80%A2 CTE flyer: https://link.esri.com/ACTE-25/cte%0D%0A %E2%80%A2 Science &amp; STEM flyer: https://link.esri.com/ACTE-25/sci%0D%0A %0D%0A Questions? Email us: schools@esri.com";
+
+   window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + (body);    //encodeURIComponent(body)
+}
+</script>
+</body>
+</html>
