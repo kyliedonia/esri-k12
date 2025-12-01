@@ -11,6 +11,8 @@
 
       font-size: 150%;
       font-weight: 600;
+      font-family: "Avenir Next","Avenir","Helvetica Neue",sans-serif;
+
       color: #293D2C; /*white;*/
       text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff,
                    1px 1px #fff, -1px -1px #fff, 1px -1px #fff, -1px 1px #fff;    /* old lighter green: 3AA4E; med green: 45673F */ 
@@ -21,6 +23,7 @@
 
     .message {
       margin: 40px;
+      max-width: 900px;
       padding: 50px;
       background-color: rgba(245, 233, 215, 0.7);  /* 194, 175, 144*/
       border-radius: 50px;
@@ -45,7 +48,7 @@
       text-align: center;
       text-decoration: none;
       display: inline-block;
-      font-size: 16px;
+      font-size: 24px;
       margin: 4px 2px;
       transition-duration: 0.4s;
       cursor: pointer;
@@ -100,7 +103,7 @@
 </ul>
 
 <p>Questions? Email us at <a href="mailto:schools@esri.com?subject=GIS Skills for Career Readiness (ACTE)">schools@esri.com</a>.</p><p>&nbsp; </p>
-<button class="button" onClick="generateEmail()">Click here to email yourself these resources to review later.</button>
+<button class="button" onClick="generateEmail()">Click here to email yourself these resources to review later</button>
 </div></div></div>
 
 <script>
@@ -111,7 +114,7 @@ window.onload = function() {
 function generateEmail() {
   var email = "";
   var subject = "GIS Skills for Career Readiness (ACTE)";
-  var body = "Thanks for visiting with Esri at ACTE! Learn more about our Schools program at https://esri.com/schools.%0D%0A %0D%0AFind GIS resources for your CTE classroom on the CTE Instructors page: https://link.esri.com/acte-25/cte. %0D%0A %0D%0AExplore these flyers to see what we offer for your classroom:%0D%0A %E2%80%A2 CTE flyer: https://link.esri.com/acte-25/cteFlyer%0D%0A %E2%80%A2 Science %26 STEM flyer: https://link.esri.com/acte-25/sciFlyer%0D%0A %0D%0A Questions? Email us: schools@esri.com";
+  var body = "Thanks for visiting with Esri at ACTE! Learn more about our Schools program at https://esri.com/schools%0D%0A %0D%0AFind GIS resources for your CTE classroom on the CTE Instructors page: https://link.esri.com/acte-25/cte %0D%0A %0D%0AExplore these flyers to see what we offer for your classroom:%0D%0A %E2%80%A2 CTE flyer: https://link.esri.com/acte-25/cteFlyer%0D%0A %E2%80%A2 Science %26 STEM flyer: https://link.esri.com/acte-25/sciFlyer%0D%0A %0D%0A Questions? Email us: schools@esri.com";
 
    window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + (body);    //encodeURIComponent(body)
 }
