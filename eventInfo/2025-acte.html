@@ -115,9 +115,10 @@ background-image: linear-gradient(to bottom,  rgba(230, 199, 154, 0.7), rgba(245
 
 <P>Find GIS resources for your CTE classroom on the <a href="https://link.esri.com/acte-25/cte">CTE Instructors page</a>.
   
-<p>Explore these flyers to see what we offer for your classroom:</p>
+<p>See what we offer for your classroom:</p>
 <ul>
   <li><a href="https://link.esri.com/acte-25/cteFlyer">CTE flyer</a></li>
+  <li><a href="https://link.esri.com/acte-25/drones">Drone mapping information</a></li>
   <li><a href="https://link.esri.com/acte-25/sciFlyer">Science & STEM flyer</a></li>
 </ul>
 
@@ -133,7 +134,7 @@ window.onload = function() {
 function generateEmail() {
   var email = "";
   var subject = "GIS Skills for Career Readiness (ACTE)";
-  var body = "Thanks for visiting with Esri at ACTE! Learn more about our Schools program at https://esri.com/schools%0D%0A %0D%0AFind GIS resources for your CTE classroom on the CTE Instructors page: https://link.esri.com/acte-25/cte %0D%0A %0D%0AExplore these flyers to see what we offer for your classroom:%0D%0A %E2%80%A2 CTE flyer: https://link.esri.com/acte-25/cteFlyer%0D%0A %E2%80%A2 Science %26 STEM flyer: https://link.esri.com/acte-25/sciFlyer%0D%0A %0D%0A Questions? Email us: schools@esri.com";
+  var body = "Thanks for visiting with Esri at ACTE! Learn more about our Schools program at https://esri.com/schools%0D%0A %0D%0AFind GIS resources for your CTE classroom on the CTE Instructors page: https://link.esri.com/acte-25/cte %0D%0A %0D%0ASee what we offer for your classroom:%0D%0A %E2%80%A2 CTE flyer: https://link.esri.com/acte-25/cteFlyer%0D%0A %E2%80%A2 Drone mapping: https://link.esri.com/acte-25/drones%0D%0A %E2%80%A2 Science %26 STEM flyer: https://link.esri.com/acte-25/sciFlyer%0D%0A %0D%0A Questions? Email us: schools@esri.com";
 
    window.location.href = "mailto:" + email + "?subject=" + subject + "&body=" + (body);    //encodeURIComponent(body)
 }
