@@ -50,7 +50,7 @@
               html += `<tr><th>${key}</th><td>${attrs[key]}</td></tr>`;
             }
             html += "</table>";
-document.getElementById('details').innerHTML = html;
+            document.getElementById('details').innerHTML = html;
 
             // Now fetch related records using ObjectID
             const objectId = attrs["objectid"];
@@ -70,7 +70,7 @@ document.getElementById('details').innerHTML = html;
       fetch(url)
         .then(response => response.json())
         .then(data => {
-          let html = "<h2>Related Records</h2><br/>" + url;
+          let html = "<h2>Related Records</h2><br/>" + url + "<br/><br/>" + data.relatedRecords[objectId];
           // The response nests related records under relatedRecords[objectId].records
           if (data.relatedRecords && data.relatedRecords[objectId] && data.relatedRecords[objectId].records.length > 0) {
             html += "<table>";
