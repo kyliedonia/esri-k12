@@ -1,3 +1,4 @@
+    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,10 +6,10 @@
   <title>Feature Details Viewer</title>
   <style>
     body { font-family: Arial, sans-serif; margin: 2em; }
-    .feature-details { margin-top: 1em; }
-    .feature-details table { border-collapse: collapse; width: 100%; }
-    .feature-details th, .feature-details td { border: 1px solid #ccc; padding: 8px; }
-    .feature-details th { background: #f4f4f4; }
+    .feature-details, .related-details { margin-top: 1em; }
+    table { border-collapse: collapse; width: 100%; margin-bottom: 1em; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+    th { background: #f4f4f4; }
   </style>
 </head>
 <body>
@@ -18,36 +19,43 @@
   <button onclick="fetchFeatureFromInput()">Show Details</button>
 
   <div class="feature-details" id="details"></div>
+  <div class="related-details" id="related"></div>
 
   <script>
-    const serviceUrl_HolidaySightings = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_6b133771b54c46e4a4db787cbf1867f4_stakeholder/FeatureServer/0/query";
     const serviceUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_1a75a21017dd44a484cd749d9e1bf9a3_results/FeatureServer/0/query"
+    // URL to holiday sightings 
+    // const serviceUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_6b133771b54c46e4a4db787cbf1867f4_stakeholder/FeatureServer/0";
+    const queryUrl = serviceUrl + "/query";
+    const relatedUrl = serviceUrl + "/queryRelatedRecords";
 
     function getUrlParam(name) {
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
     }
 
-    // This function fetches feature details given a globalid
     function fetchFeature(globalid) {
+      document.getElementById('related').innerHTML = ""; // Clear related records
       if (!globalid) {
         document.getElementById('details').innerHTML = "<p>Please enter a GlobalID.</p>";
         return;
       }
       document.getElementById('globalid').value = globalid;
-      const url = `${serviceUrl}?where=GlobalID='${globalid}'&outFields=*&f=json`;
+      const url = `${queryUrl}?where=GlobalID='${globalid}'&outFields=*&f=json`;
 
       fetch(url)
         .then(response => response.json())
         .then(data => {
           if (data.features && data.features.length > 0) {
             const attrs = data.features[0].attributes;
-            let html = "<h2>Feature Details</h2><table>";
-            for (const key in attrs) {
-  html += `<tr><th>${key}</th><td>${attrs[key]}</td></tr>`;
-}
+            let html = "<h2>Feature Details</h2><table>"; for (const key in attrs) {
+              html += `<tr><th>${key}</th><td>${attrs[key]}</td></tr>`;
+            }
             html += "</table>";
             document.getElementById('details').innerHTML = html;
+
+            // Now fetch related records using ObjectID
+            const objectId = attrs["OBJECTID"];
+            fetchRelatedRecords(objectId);
           } else {
             document.getElementById('details').innerHTML = "<p>No feature found for this GlobalID.</p>";
           }
@@ -57,13 +65,41 @@
         });
     }
 
-    // This function is called by the button
+    function fetchRelatedRecords(objectId) {
+      // You may need to adjust relationshipId depending on your service setup
+      const relationshipId = 0; // Usually 0, but check your service's relationships
+      const url = `${relatedUrl}?objectIds=${objectId}&relationshipId=${relationshipId}&outFields=*&f=json`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          let html = "<h2>Related Records</h2>";
+          if (data.relatedRecords && data.relatedRecords.length > 0) {
+            html += "<table>";
+            // Display all attributes for each related record
+            data.relatedRecords.forEach(record => {
+              html += "<tr>";
+              for (const key in record.attributes) {
+                html += `<th>${key}</th><td>${record.attributes[key]}</td>`;
+  }
+              html += "</tr>";
+            });
+            html += "</table>";
+          } else {
+            html += "<p>No related records found.</p>";
+          }
+          document.getElementById('related').innerHTML = html;
+        })
+        .catch(err => {
+          document.getElementById('related').innerHTML = "<p>Error fetching related records.</p>";
+        });
+    }
+
     function fetchFeatureFromInput() {
       const globalid = document.getElementById('globalid').value.trim();
       fetchFeature(globalid);
     }
 
-    // On page load, check for globalid in URL
     window.onload = function() {
       const globalid = getUrlParam('globalid');
       if (globalid) {
