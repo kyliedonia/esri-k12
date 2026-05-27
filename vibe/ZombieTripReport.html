@@ -1,4 +1,3 @@
-    
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,11 +21,11 @@
   <div class="related-details" id="related"></div>
 
   <script>
-    const serviceUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_1a75a21017dd44a484cd749d9e1bf9a3_results/FeatureServer/0/query"
-    // URL to holiday sightings 
-    // const serviceUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_6b133771b54c46e4a4db787cbf1867f4_stakeholder/FeatureServer/0";
+    // Updated service URL
+    const serviceUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_1a75a21017dd44a484cd749d9e1bf9a3_results/FeatureServer/0";
     const queryUrl = serviceUrl + "/query";
     const relatedUrl = serviceUrl + "/queryRelatedRecords";
+    const relationshipId = 0; // Update if your service uses a different relationshipId
 
     function getUrlParam(name) {
       const params = new URLSearchParams(window.location.search);
@@ -46,12 +45,12 @@
         .then(response => response.json())
         .then(data => {
           if (data.features && data.features.length > 0) {
-            const attrs = data.features[0].attributes;
-            let html = "<h2>Feature Details</h2><table>"; for (const key in attrs) {
+            const attrs = data.features[0].attributes; let html = "<h2>Feature Details</h2><table>";
+            for (const key in attrs) {
               html += `<tr><th>${key}</th><td>${attrs[key]}</td></tr>`;
             }
             html += "</table>";
-            document.getElementById('details').innerHTML = html;
+document.getElementById('details').innerHTML = html;
 
             // Now fetch related records using ObjectID
             const objectId = attrs["OBJECTID"];
@@ -66,18 +65,16 @@
     }
 
     function fetchRelatedRecords(objectId) {
-      // You may need to adjust relationshipId depending on your service setup
-      const relationshipId = 0; // Usually 0, but check your service's relationships
       const url = `${relatedUrl}?objectIds=${objectId}&relationshipId=${relationshipId}&outFields=*&f=json`;
 
       fetch(url)
         .then(response => response.json())
         .then(data => {
           let html = "<h2>Related Records</h2>";
-          if (data.relatedRecords && data.relatedRecords.length > 0) {
+          // The response nests related records under relatedRecords[objectId].records
+          if (data.relatedRecords && data.relatedRecords[objectId] && data.relatedRecords[objectId].records.length > 0) {
             html += "<table>";
-            // Display all attributes for each related record
-            data.relatedRecords.forEach(record => {
+            data.relatedRecords[objectId].records.forEach(record => {
               html += "<tr>";
               for (const key in record.attributes) {
                 html += `<th>${key}</th><td>${record.attributes[key]}</td>`;
