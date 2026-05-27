@@ -70,7 +70,7 @@ document.getElementById('details').innerHTML = html;
       fetch(url)
         .then(response => response.json())
         .then(data => {
-          let html = "<h2>Related Records</h2>";
+          let html = "<h2>Related Records</h2><br/>" + url;
           // The response nests related records under relatedRecords[objectId].records
           if (data.relatedRecords && data.relatedRecords[objectId] && data.relatedRecords[objectId].records.length > 0) {
             html += "<table>";
