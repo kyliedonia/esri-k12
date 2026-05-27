@@ -53,7 +53,7 @@
 document.getElementById('details').innerHTML = html;
 
             // Now fetch related records using ObjectID
-            const objectId = attrs["OBJECTID"];
+            const objectId = attrs["objectid"];
             fetchRelatedRecords(objectId);
           } else {
             document.getElementById('details').innerHTML = "<p>No feature found for this GlobalID.</p>";
