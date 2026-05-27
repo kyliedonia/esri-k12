@@ -15,27 +15,25 @@
   <h1>Feature Details Viewer</h1>
   <label for="globalid">Enter GlobalID:</label>
   <input type="text" id="globalid" size="40" placeholder="e.g. 12345678-90ab-cdef-1234-567890abcdef">
-  <button onclick="fetchFeature()">Show Details</button>
+  <button onclick="fetchFeatureFromInput()">Show Details</button>
 
   <div class="feature-details" id="details"></div>
 
   <script>
     const serviceUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_6b133771b54c46e4a4db787cbf1867f4_stakeholder/FeatureServer/0/query";
 
-    // Helper to get URL parameters
     function getUrlParam(name) {
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
     }
 
+    // This function fetches feature details given a globalid
     function fetchFeature(globalid) {
       if (!globalid) {
         document.getElementById('details').innerHTML = "<p>Please enter a GlobalID.</p>";
         return;
       }
-
-      document.getElementById('globalid').value = globalid; // Set input value
-
+      document.getElementById('globalid').value = globalid;
       const url = `${serviceUrl}?where=GlobalID='${globalid}'&outFields=*&f=json`;
 
       fetch(url)
@@ -45,8 +43,8 @@
             const attrs = data.features[0].attributes;
             let html = "<h2>Feature Details</h2><table>";
             for (const key in attrs) {
-              html += `<tr><th>${key}</th><td>${attrs[key]}</td></tr>`;
-            }
+  html += `<tr><th>${key}</th><td>${attrs[key]}</td></tr>`;
+}
             html += "</table>";
             document.getElementById('details').innerHTML = html;
           } else {
@@ -58,18 +56,18 @@
         });
     }
 
+    // This function is called by the button
+    function fetchFeatureFromInput() {
+      const globalid = document.getElementById('globalid').value.trim();
+      fetchFeature(globalid);
+    }
+
     // On page load, check for globalid in URL
     window.onload = function() {
       const globalid = getUrlParam('globalid');
       if (globalid) {
         fetchFeature(globalid);
       }
-    };
-
-    // Button handler
-    window.fetchFeature = function() {
-      const globalid = document.getElementById('globalid').value.trim();
-      fetchFeature(globalid);
     };
   </script>
 </body>
