@@ -4,18 +4,6 @@
   <meta charset="UTF-8">
   <title>Zombie Trip Journal</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 2em; }
-    .feature-details, .related-details { margin-top: 1em; }
-    table { border-collapse: collapse; width: 100%; margin-bottom: 1em; }
-    th, td { border: 1px solid #ccc; padding: 8px; }
-    th { background: #f4f4f4; }
-    pre { background: #eee; padding: 1em; }
-    ul { margin-bottom: 2em; }
-    h3 { margin-top: 1em; }
-   .red-x { color: red; font-weight: bold; }
-   .green-check { color: green; font-weight: bold; }
-   .scorecard { color: blue; font-size:22px; }
-
     body {
       font-family: 'Creepster', 'Arial', sans-serif;
       margin: 2em;
@@ -30,29 +18,17 @@
       letter-spacing: 2px;
     }
     h2, h3 {
-      color: #7cfc00;
+      color: #d73030;  /*#7cfc00;*/
       font-family: 'Creepster', cursive, sans-serif;
       text-shadow: 1px 1px 4px #000;
     }
     .feature-details, .related-details { margin-top: 1em; }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-bottom: 1em;
-      background: rgba(44, 44, 44, 0.8);
-    }
-    th, td {
-      border: 1px solid #b22222;
-      padding: 8px;
-      color: #e0e0e0;
-    }
-    th { background: #232323; }
     pre { background: #333; padding: 1em; color: #7cfc00; }
     ul { margin-bottom: 2em; }
     h3 { margin-top: 1em; }
     .red-x { color: #b22222; font-weight: bold; }
     .green-check { color: #7cfc00; font-weight: bold; }
-    .scorecard { color: #ffcc00; font-size:22px; font-family: 'Creepster', cursive, sans-serif; }
+    .scorecard { color: #ffcc00; font-size:22px; font-family: 'Creepster', cursive, sans-serif; padding:15px;}
     .zombie-icon {
       font-size: 2em;
       vertical-align: middle;
@@ -72,9 +48,9 @@
 </head>
 <body>
   <h1>Zombie Trip Journal</h1>
-  <div id="author" class="zombie-bg"></div>
-  <div class="scorecard" id="scorecard"></div>
   <div id="introPara" class="zombie-bg"></div>
+  <div class="scorecard" id="scorecard"></div>
+
   <!--
   <label for="globalid">Enter GlobalID:</label>
   <input type="text" id="globalid" size="40" placeholder="e.g. 12345678-90ab-cdef-1234-567890abcdef">
@@ -143,23 +119,21 @@
           if (data.features && data.features.length > 0) {
             const attrs = data.features[0].attributes;
             // Only show the name field
-            let html = "<h2>By ";
+            let htmlIntroPara = "<h2>By ";
             if (attrs.name !== undefined && attrs.name !== null && attrs.name !== "") {
-              html += `${attrs.name}</h2>`;
+              htmlIntroPara += `${attrs.name}</h2>`;
             } else {
-              html += "Unknown author</h2>";
+              htmlIntroPara += "Unknown author</h2>";
             } 
-            document.getElementById('author').innerHTML = html;
 
             // Add an intro paragraph based on if survived or not
-            let htmlIntroPara = ""
             if (attrs.survived !== undefined && attrs.survived !== null && attrs.survived !== "" && attrs.survived == "Yes") {
-              htmlIntroPara += `<p><strong>I survived!</strong> `;
+              htmlIntroPara += `<p><span style=\"color:#7cfc00;\"><strong>I survived!</strong></span> `;
             } else {
-              htmlIntroPara += `<p><strong>The zombies got me.</strong> `;
+              htmlIntroPara += `<p><span style=\"color:#d73030;\"><strong>The zombies got me.</strong></span> `;
             } 
             htmlIntroPara += "Zombies were everywhere! I went through places around the US as I tried to escape.</p>";
-            htmlIntroPara += "<p>Here are the places I visited, and some facts about them:</p>";
+            htmlIntroPara += "<p>Here are the places I visited, and some facts about them.</p>";
             document.getElementById('introPara').innerHTML = htmlIntroPara;
 
             const objectId = attrs["objectid"];
@@ -281,7 +255,7 @@ if (group && group.relatedRecords && group.relatedRecords.length > 0) {
           (place == "Other" && answer != "")  ||
           (place == "GC" && answer == "YES")) {
         questionsCorrect += 1;
-        return `<span style="color:green;font-weight:bold;font-size:26px;padding-left:10px;">&#10004;</span>`;
+        return `<span class="green-check" style="font-size:26px;padding-left:10px;">&#10004;</span>`;
       }
       else // wrong answer
         return `<span class="red-x" style="font-size:20px;padding-left:10px;">🧟</span>`;
