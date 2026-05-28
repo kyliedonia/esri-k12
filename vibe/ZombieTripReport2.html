@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zombie Trip Journal</title>
+  <style>
+    body {
+      font-family: 'Creepster', 'Arial', sans-serif;
+      margin: 2em;
+      background: #232323 url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') repeat;
+      color: #e0e0e0;
+    }
+    h1 {
+      color: #b22222;
+      text-shadow: 2px 2px 8px #000, 0 0 10px #4e4e4e;
+      font-family: 'Creepster', cursive, sans-serif;
+      font-size: 3em;
+      letter-spacing: 2px;
+    }
+    h2, h3 {
+      color: #7cfc00;
+      font-family: 'Creepster', cursive, sans-serif;
+      text-shadow: 1px 1px 4px #000;
+    }
+    .feature-details, .related-details { margin-top: 1em; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 1em;
+      background: rgba(44, 44, 44, 0.8);
+    }
+    th, td {
+      border: 1px solid #b22222;
+      padding: 8px;
+      color: #e0e0e0;
+    }
+    th { background: #232323; }
+    pre { background: #333; padding: 1em; color: #7cfc00; }
+    ul { margin-bottom: 2em; }
+    h3 { margin-top: 1em; }
+    .red-x { color: #b22222; font-weight: bold; }
+    .green-check { color: #7cfc00; font-weight: bold; }
+    .scorecard { color: #ffcc00; font-size:22px; font-family: 'Creepster', cursive, sans-serif; }
+    .zombie-icon {
+      font-size: 2em;
+      vertical-align: middle;
+      margin-right: 8px;
+      filter: drop-shadow(2px 2px 2px #000);
+    }
+    .zombie-bg {
+      background: rgba(44, 44, 44, 0.8);
+      border-radius: 8px;
+      padding: 1em;
+      margin-bottom: 1em;
+    }
+    a, a:visited { color: #7cfc00; }
+    /* Google Fonts for Creepster */
+    @import url('https://fonts.googleapis.com/css?family=Creepster');
+  </style>
+</head>
+<body>
+  <h1>
+    <span class="zombie-icon">&#128128;</span>
+    Zombie Trip Journal
+    <span class="zombie-icon">&#128128;</span>
+  </h1>
+  <div id="author" class="zombie-bg"></div>
+  <div class="scorecard" id="scorecard"></div>
+  <div id="introPara" class="zombie-bg"></div>
+  <!--
+  <label for="globalid">Enter GlobalID:</label>
+  <input type="text" id="globalid" size="40" placeholder="e.g. 12345678-90ab-cdef-1234-567890abcdef">
+  <button onclick="fetchFeatureFromInput()">Show Details</button>
+  -->
+
+  <div class="feature-details zombie-bg" id="details"></div>
+  <div class="related-details zombie-bg" id="related"></div>
+  <!--div class="debug" id="debug"></div-->
+
+  <script>
+    const serviceUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_1a75a21017dd44a484cd749d9e1bf9a3_results/FeatureServer/0";
+    const relatedLayerUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_1a75a21017dd44a484cd749d9e1bf9a3_results/FeatureServer/1?f=json";
+    const queryUrl = serviceUrl + "/query";
+    const relatedUrl = serviceUrl + "/queryRelatedRecords";
+    const relationshipId = 1; // Use relationshipId 1
+
+    // Fields to exclude from related record display
+    const excludeFields = [
+      "objectid",
+      "globalid",
+      "parentglobalid",
+      "CreationDate",
+      "Creator",
+      "EditDate",
+      "Editor",
+      "place_name"
+    ];
+
+    let fieldAliases = {}; // Will be populated with field name -> alias
+    let placesVisited = 0; // number of places visited
+    let questionsCorrect = 0; // number of questions correctly answered
+
+    // Fetch field aliases for related records layer
+    function fetchFieldAliases() {
+      return fetch(relatedLayerUrl)
+        .then(response => response.json())
+        .then(data => {
+          if (data.fields && Array.isArray(data.fields)) {
+data.fields.forEach(field => {
+              fieldAliases[field.name] = field.alias; });
+          }
+        });
+    }
+
+    function getUrlParam(name) {
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
+    }
+
+    function fetchFeature(globalid) {
+      document.getElementById('related').innerHTML = ""; // Clear related records
+      //document.getElementById('debug').innerHTML = ""; // Clear debug
+      if (!globalid) {
+        document.getElementById('details').innerHTML = "<p>Please enter a GlobalID.</p>";
+        return;
+      }
+      // If using an input box for the global ID, set it 
+      // document.getElementById('globalid').value = globalid;
+      const url = `${queryUrl}?where=GlobalID='${globalid}'&outFields=*&f=json`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          if (data.features && data.features.length > 0) {
+            const attrs = data.features[0].attributes;
+            // Only show the name field
+            let html = "<h2>By ";
+            if (attrs.name !== undefined && attrs.name !== null && attrs.name !== "") {
+              html += `${attrs.name}</h2>`;
+            } else {
+              html += "Unknown author</h2>";
+            }  document.getElementById('author').innerHTML = html;
+
+            // Add an intro paragraph based on if survived or not let htmlIntroPara = ""
+if (attrs.survived !== undefined && attrs.survived !== null && attrs.survived !== "" && attrs.survived == "Yes") {
+              htmlIntroPara += `<p><strong style="color:#7cfc00;">I survived!</strong> `; } else {
+  htmlIntroPara += `<p><strong style="color:#b22222;">The zombies got me.</strong> `;
+} 
+            htmlIntroPara += "Zombies were everywhere! I went through places around the US as I tried to escape.</p>";
+            htmlIntroPara += "<p>Here are the places I visited, and some facts about them:</p>";
+            document.getElementById('introPara').innerHTML = htmlIntroPara;
+
+            const objectId = attrs["objectid"];
+            fetchRelatedRecords(objectId);
+
+          } else {
+            document.getElementById('details').innerHTML = "<p>No feature found for this GlobalID.</p>";
+          }
+        })
+        .catch(err => {
+          document.getElementById('details').innerHTML = "<p>Error fetching feature details.</p>";
+        });
+    }
+
+    function fetchRelatedRecords(objectId) {
+      const url = `${relatedUrl}?objectIds=${objectId}&relationshipId=${relationshipId}&outFields=*&f=json`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          //document.getElementById('debug').innerHTML = "<h3>Debug: Related Records JSON</h3><pre>" + JSON.stringify(data, null, 2) + "</pre>";
+          let records = [];
+
+          // Handle relatedRecordGroups structure
+          if (data.relatedRecordGroups && Array.isArray(data.relatedRecordGroups)) { const group = data.relatedRecordGroups.find(g => g.objectId == objectId);
+            if (group && group.relatedRecords && group.relatedRecords.length > 0) {
+              records = group.relatedRecords; }
+          }
+
+          placesVisited = records.length;
+          // Handle legacy relatedRecords structure
+          if (
+            records.length === 0 &&
+            data.relatedRecords &&
+            (data.relatedRecords[objectId] || data.relatedRecords[String(objectId)])
+          ) {
+            const rel = data.relatedRecords[objectId] || data.relatedRecords[String(objectId)];
+            if (rel && rel.records && rel.records.length > 0) {
+  records = rel.records;
+}
+          }
+
+          let html = "<h2>Places visited</h2><ol>";
+          if (records.length > 0) {
+            records.forEach(record => {
+  const attrs = record.attributes;
+  // Use place_name as heading, fallback to "Unknown Place"
+  const heading = attrs.place_name ? attrs.place_name : "Unknown Place";
+  // Zombie icons and checkmarks
+              let zombieIcon = '<span class="zombie-icon">&#128128;</span>';   let checkmarkHtml = "";
+              if (heading === "Grand Canyon") {
+                checkmarkHtml = ' <span style="color:red;font-weight:bold;font-size:24px;">&#10004;</span>';
+              }
+              html += `<h3><li>${zombieIcon}${heading} <span class="red-x">&#10060;</span>${checkmarkHtml}</li></h3><ul>`;
+  let answered = "false";   for (const key in attrs) {  
+    if (
+                  !excludeFields.includes(key) &&
+      attrs[key] !== null &&
+      attrs[key] !== undefined &&
+      attrs[key] !== ""
+    ) {
+      const alias = fieldAliases[key] || key;
+                  html += `<li><strong>${alias}</strong><p>${attrs[key]}`+ checkAnswer(attrs.place_name, attrs[key]) + `</p></li>`;  // grade the answer       answered = "true";
+                }
+              }
+  if (answered == "false")  // if no question was answered, this is wrong
+                html += checkAnswer("Nope", "wrong");
+              html += "</ul>";
+            });
+          } else {
+            html += "<p>No related records found.</p>";
+          }
+          document.getElementById('related').innerHTML = html;
+          document.getElementById('scorecard').innerHTML = "Grade: " + questionsCorrect + "/" + placesVisited;
+
+        })
+        .catch(err => {
+          document.getElementById('related').innerHTML = "<p>Error fetching related records.</p>";
+        });
+    }
+
+    // function fetchFeatureFromInput() {
+    //   const globalid = document.getElementById('globalid').value.trim();
+    //   fetchFeature(globalid);
+    // }
+
+    function checkAnswer(place, answer) {
+      if ((place == "Sierra Nevada" && answer == "Rain shadow")  ||
+          (place == "Rocky Mountains" && answer == "Continental Divide")  ||
+          (place == "Great Plains" && answer == "Breadbasket")  ||
+          (place == "Gulf Coast" && answer == "Hurricanes")  ||
+          (place == "Appalachian Mountains" && answer == "Older")  ||
+          (place == "Great Lakes Region" && answer == "21%")  ||
+          (place == "Sonoran Desert" && answer == "Less than 10 inches")  ||
+          (place == "Pacific Northwest" && answer == "Over 150 days per year")  ||
+          (place == "New England" && answer == "Glaciers")  ||
+          (place == "Mojave Desert" && answer == "130°F (54.4°C)")  ||
+          (place == "Midwest" && answer == "75%")  ||
+          (place == "Southeast" && answer == "Hotter")  ||
+          (place == "Grand Canyon" && answer == "1 mile deep, 277 miles long") ||
+          (place == "Yellowstone" && answer == "Magma")  ||
+          (place == "Mississippi River" && answer == "Gulf of Mexico")  ||
+          (place == "Death Valley" && answer == "282 feet below sea level")  ||
+          (place == "Florida Everglades" && answer == "River")  ||
+          (place == "Great Salt Lake" && answer == "Evaporation")  ||
+          (place == "Mount Shasta" && answer == "True")  ||
+          (place == "Ozark Plateau" && answer == "Erosion")  ||
+          (place == "Niagara Falls" && answer == "1 foot")  ||
+          (place == "Continental Divide" && answer == "Pacific")  ||
+          (place == "Tornado Alley" && answer == "Cold and warm air colliding")  ||
+          (place == "Ogallala Aquafer" && answer == "100 times")  ||
+          (place == "Columbia River Gorge" && answer == "An ice dam")  ||
+          (place == "Chesapeake Bay" && answer == "Fisheries")  ||
+          (place == "San Juan Mountains" && answer == "14,000 foot peaks")  ||
+          (place == "Great Smoky Mountains National Park" && answer == "Water vapor released by trees")  ||
+          (place == "Rocky Mountain National Park" && answer == "Alpine tundra")  ||
+          (place == "Zion National Park" && answer == "2000 ft tall, 20 ft wide")  ||
+          (place == "Olympic National Park" && answer == "14 ft")  ||
+          (place == "Shenandoah National Park" && answer == "They were relocated")  ||
+          (place == "Big Bend National Park" && answer == "Rio Grande")  ||
+          (place == "Other" && answer != "")  ||
+          (place == "GC" && answer == "YES")) {
+        questionsCorrect += 1;
+        return `<span style="color:#7cfc00;font-weight:bold;font-size:26px;padding-left:10px;">&#10004;</span>`;
+      }
+      else // wrong answer
+        return `<span class="red-x" style="font-size:20px;padding-left:10px;">&#10060;</span>`;
+    }
+
+    // On page load, fetch field aliases first, then handle globalid param
+    window.onload = function() {
+      fetchFieldAliases().then(() => {
+        const globalid = getUrlParam('globalid');
+        if (globalid) {
+          fetchFeature(globalid);
+        }
+      });
+    };
+  </script>
+</body>
+</html>
