@@ -15,21 +15,74 @@
    .red-x { color: red; font-weight: bold; }
    .green-check { color: green; font-weight: bold; }
    .scorecard { color: blue; font-size:22px; }
+
+    body {
+      font-family: 'Creepster', 'Arial', sans-serif;
+      margin: 2em;
+      background: #232323;
+      color: #e0e0e0;
+    }
+    h1 {
+      color: #b22222;
+      text-shadow: 2px 2px 8px #000, 0 0 10px #4e4e4e;
+      font-family: 'Creepster', cursive, sans-serif;
+      font-size: 3em;
+      letter-spacing: 2px;
+    }
+    h2, h3 {
+      color: #7cfc00;
+      font-family: 'Creepster', cursive, sans-serif;
+      text-shadow: 1px 1px 4px #000;
+    }
+    .feature-details, .related-details { margin-top: 1em; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 1em;
+      background: rgba(44, 44, 44, 0.8);
+    }
+    th, td {
+      border: 1px solid #b22222;
+      padding: 8px;
+      color: #e0e0e0;
+    }
+    th { background: #232323; }
+    pre { background: #333; padding: 1em; color: #7cfc00; }
+    ul { margin-bottom: 2em; }
+    h3 { margin-top: 1em; }
+    .red-x { color: #b22222; font-weight: bold; }
+    .green-check { color: #7cfc00; font-weight: bold; }
+    .scorecard { color: #ffcc00; font-size:22px; font-family: 'Creepster', cursive, sans-serif; }
+    .zombie-icon {
+      font-size: 2em;
+      vertical-align: middle;
+      margin-right: 8px;
+      filter: drop-shadow(2px 2px 2px #000);
+    }
+    .zombie-bg {
+      background: rgba(44, 44, 44, 0.8);
+      border-radius: 8px;
+      padding: 1em;
+      margin-bottom: 1em;
+    }
+    a, a:visited { color: #7cfc00; }
+    /* Google Fonts for Creepster */
+    @import url('https://fonts.googleapis.com/css?family=Creepster');
   </style>
 </head>
 <body>
   <h1>Zombie Trip Journal</h1>
-  <div id="author"></div>
+  <div id="author" class="zombie-bg"></div>
   <div class="scorecard" id="scorecard"></div>
-  <div id="introPara"></div>
+  <div id="introPara" class="zombie-bg"></div>
   <!--
   <label for="globalid">Enter GlobalID:</label>
   <input type="text" id="globalid" size="40" placeholder="e.g. 12345678-90ab-cdef-1234-567890abcdef">
   <button onclick="fetchFeatureFromInput()">Show Details</button>
   -->
 
-  <div class="feature-details" id="details"></div>
-  <div class="related-details" id="related"></div>
+  <div class="feature-details" id="details" class="zombie-bg"></div>
+  <div class="related-details" id="related" class="zombie-bg"></div>
   <!--div class="debug" id="debug"></div-->
 
   <script>
