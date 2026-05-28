@@ -141,7 +141,8 @@ data.fields.forEach(field => {
               html += "Unknown author</h2>";
             }  document.getElementById('author').innerHTML = html;
 
-            // Add an intro paragraph based on if survived or not let htmlIntroPara = ""
+            // Add an intro paragraph based on if survived or not 
+            let htmlIntroPara = ""
 if (attrs.survived !== undefined && attrs.survived !== null && attrs.survived !== "" && attrs.survived == "Yes") {
               htmlIntroPara += `<p><strong style="color:#7cfc00;">I survived!</strong> `; } else {
   htmlIntroPara += `<p><strong style="color:#b22222;">The zombies got me.</strong> `;
