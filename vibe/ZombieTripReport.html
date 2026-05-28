@@ -18,7 +18,8 @@
 </head>
 <body>
   <h1>Zombie Trip Journal</h1>
-  <div id="introPara">Zombies were everywhere! I went through places around the US as I tried to escape. Here are the places I visited, and some facts about them:</div>
+  <div id="author"></div>
+  <div id="introPara"></div>
   <!--
   <label for="globalid">Enter GlobalID:</label>
   <input type="text" id="globalid" size="40" placeholder="e.g. 12345678-90ab-cdef-1234-567890abcdef">
@@ -92,15 +93,16 @@
             } else {
               html += "Unknown author</h2>";
             } 
-            document.getElementById('details').innerHTML = html;
+            document.getElementById('author').innerHTML = html;
 
             // Add an intro paragraph based on if survived or not
-            let htmlIntroPara = "<p>Zombies were everywhere! I went through places around the US as I tried to escape.</p>";
-            if (attrs.name !== undefined && attrs.name !== null && attrs.name !== "") {
-              htmlIntroPara += `${attrs.name}</h2>`;
+            let htmlIntroPara = ""
+            if (attrs.survived !== undefined && attrs.survived !== null && attrs.survived !== "" && attrs.survived == "Yes") {
+              htmlIntroPara += `<p><strong>I survived!</strong> `;
             } else {
-              htmlIntroPara += "Unknown author</h2>";
+              htmlIntroPara += `<p><strong>The zombies got me.</strong> `;
             } 
+            htmlIntroPara += "Zombies were everywhere! I went through places around the US as I tried to escape.</p>";
             htmlIntroPara += "<p>Here are the places I visited, and some facts about them:</p>";
             document.getElementById('introPara').innerHTML = htmlIntroPara;
 
