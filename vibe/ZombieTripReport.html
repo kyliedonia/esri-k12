@@ -9,23 +9,60 @@
     table { border-collapse: collapse; width: 100%; margin-bottom: 1em; }
     th, td { border: 1px solid #ccc; padding: 8px; }
     th { background: #f4f4f4; }
+    pre { background: #eee; padding: 1em; }
+    ul { margin-bottom: 2em; }
+    h3 { margin-top: 1em; }
+   .red-x { color: red; font-weight: bold; }
+   .green-check { color: green; font-weight: bold; }
   </style>
 </head>
 <body>
-  <h1>Feature Details Viewer</h1>
+  <h1>Zombie Trip Journal</h1>
+  <p>Zombies were everywhere! I went through places around the US as I tried to escape. Here are the places I visited, and some facts about them:</p>
+  <!--
   <label for="globalid">Enter GlobalID:</label>
   <input type="text" id="globalid" size="40" placeholder="e.g. 12345678-90ab-cdef-1234-567890abcdef">
   <button onclick="fetchFeatureFromInput()">Show Details</button>
+  -->
+
 
   <div class="feature-details" id="details"></div>
   <div class="related-details" id="related"></div>
+  <!--div class="debug" id="debug"></div-->
 
   <script>
-    // Updated service URL
     const serviceUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_1a75a21017dd44a484cd749d9e1bf9a3_results/FeatureServer/0";
+    const relatedLayerUrl = "https://services3.arcgis.com/ixehHGhSDmBKeOyS/arcgis/rest/services/survey123_1a75a21017dd44a484cd749d9e1bf9a3_results/FeatureServer/1?f=json";
     const queryUrl = serviceUrl + "/query";
     const relatedUrl = serviceUrl + "/queryRelatedRecords";
-    const relationshipId = 1; // Update if your service uses a different relationshipId
+    const relationshipId = 1; // Use relationshipId 1
+
+    // Fields to exclude from related record display
+    const excludeFields = [
+      "objectid",
+      "globalid",
+      "parentglobalid",
+      "CreationDate",
+      "Creator",
+      "EditDate",
+      "Editor",
+      "place_name"
+    ];
+
+    let fieldAliases = {}; // Will be populated with field name -> alias
+
+    // Fetch field aliases for related records layer
+    function fetchFieldAliases() {
+      return fetch(relatedLayerUrl)
+        .then(response => response.json())
+        .then(data => {
+          if (data.fields && Array.isArray(data.fields)) {
+            data.fields.forEach(field => {
+              fieldAliases[field.name] = field.alias;
+});
+          }
+        });
+    }
 
     function getUrlParam(name) {
       const params = new URLSearchParams(window.location.search);
@@ -34,25 +71,28 @@
 
     function fetchFeature(globalid) {
       document.getElementById('related').innerHTML = ""; // Clear related records
+      //document.getElementById('debug').innerHTML = ""; // Clear debug
       if (!globalid) {
         document.getElementById('details').innerHTML = "<p>Please enter a GlobalID.</p>";
         return;
       }
-      document.getElementById('globalid').value = globalid;
+      // If using an input box for the global ID, set it 
+      // document.getElementById('globalid').value = globalid;
       const url = `${queryUrl}?where=GlobalID='${globalid}'&outFields=*&f=json`;
 
       fetch(url)
         .then(response => response.json())
         .then(data => {
           if (data.features && data.features.length > 0) {
-            const attrs = data.features[0].attributes; let html = "<h2>Feature Details</h2><table>";
-            for (const key in attrs) {
-              html += `<tr><th>${key}</th><td>${attrs[key]}</td></tr>`;
-            }
-            html += "</table>";
-            document.getElementById('details').innerHTML = html;
+            const attrs = data.features[0].attributes;
+            // Only show the name field
+            let html = "<h2>By ";
+            if (attrs.name !== undefined && attrs.name !== null && attrs.name !== "") {
+              html += `${attrs.name}</h2>`;
+            } else {
+              html += "Unknown author</h2>";
+            } document.getElementById('details').innerHTML = html;
 
-            // Now fetch related records using ObjectID
             const objectId = attrs["objectid"];
             fetchRelatedRecords(objectId);
           } else {
@@ -70,18 +110,52 @@
       fetch(url)
         .then(response => response.json())
         .then(data => {
-          let html = "<h2>Related Records</h2><br/>" + url + "<br/><br/>" + data.relatedRecords[objectId];
-          // The response nests related records under relatedRecords[objectId].records
-          if (data.relatedRecords && data.relatedRecords[objectId] && data.relatedRecords[objectId].records.length > 0) {
-            html += "<table>";
-            data.relatedRecords[objectId].records.forEach(record => {
-              html += "<tr>";
-              for (const key in record.attributes) {
-                html += `<th>${key}</th><td>${record.attributes[key]}</td>`;
-  }
-              html += "</tr>";
+          //document.getElementById('debug').innerHTML = "<h3>Debug: Related Records JSON</h3><pre>" + JSON.stringify(data, null, 2) + "</pre>";let records = [];
+
+          // Handle relatedRecordGroups structure
+          if (data.relatedRecordGroups && Array.isArray(data.relatedRecordGroups)) {
+            const group = data.relatedRecordGroups.find(g => g.objectId == objectId);
+if (group && group.relatedRecords && group.relatedRecords.length > 0) {
+  records = group.relatedRecords;
+            }
+          }
+
+          // Handle legacy relatedRecords structure
+          if (
+            records.length === 0 &&
+            data.relatedRecords &&
+            (data.relatedRecords[objectId] || data.relatedRecords[String(objectId)])
+          ) {
+            const rel = data.relatedRecords[objectId] || data.relatedRecords[String(objectId)];
+            if (rel && rel.records && rel.records.length > 0) {
+              records = rel.records;
+            }
+          }
+
+          let html = "<h2>Places visited</h2><ol>";
+          if (records.length > 0) {
+            records.forEach(record => {
+  const attrs = record.attributes;
+  // Use place_name as heading, fallback to "Unknown Place"
+  const heading = attrs.place_name ? attrs.place_name : "Unknown Place";   
+  html += `<h3><li>${heading}</h3><ul>`;
+  let answered = "false";
+              for (const key in attrs) {  
+                if (
+                  !excludeFields.includes(key) &&
+      attrs[key] !== null &&
+      attrs[key] !== undefined &&
+      attrs[key] !== ""
+    ) {
+                  const alias = fieldAliases[key] || key;
+                  html += `<li><strong>${alias}</strong><p>${attrs[key]}`+ checkAnswer(attrs.place_name, attrs[key]) +`</p></li>`;  // grade the answer
+                  answered = "true";
+    }
+              }
+              if (answered == "false")  // if no question was answered, this is wrong
+                html += checkAnswer("Nope", "wrong");
+              html += "</ul>";
             });
-            html += "</table>";
           } else {
             html += "<p>No related records found.</p>";
           }
@@ -92,16 +166,60 @@
         });
     }
 
-    function fetchFeatureFromInput() {
-      const globalid = document.getElementById('globalid').value.trim();
-      fetchFeature(globalid);
+   // function fetchFeatureFromInput() {
+   //   const globalid = document.getElementById('globalid').value.trim();
+   //   fetchFeature(globalid);
+   // }
+
+    function checkAnswer(place, answer) {
+      if ((place == "Sierra Nevada" && answer == "Rain shadow")  ||
+          (place == "Rocky Mountains" && answer == "Continental Divide")  ||
+          (place == "Great Plains" && answer == "Breadbasket")  ||
+          (place == "Gulf Coast" && answer == "Hurricanes")  ||
+          (place == "Appalachian Mountains" && answer == "Older")  ||
+          (place == "Great Lakes Region" && answer == "21%")  ||
+          (place == "Sonoran Desert" && answer == "Less than 10 inches")  ||
+          (place == "Pacific Northwest" && answer == "Over 150 days per year")  ||
+          (place == "New England" && answer == "Glaciers")  ||
+          (place == "Mojave Desert" && answer == "130°F (54.4°C)")  ||
+          (place == "Midwest" && answer == "75%")  ||
+          (place == "Southeast" && answer == "Hotter")  ||
+          (place == "Grand Canyon" && answer == "1 mile deep, 277 miles long") ||
+          (place == "Yellowstone" && answer == "Magma")  ||
+          (place == "Mississippi River" && answer == "Gulf of Mexico")  ||
+          (place == "Death Valley" && answer == "282 feet below sea level")  ||
+          (place == "Florida Everglades" && answer == "River")  ||
+          (place == "Great Salt Lake" && answer == "Evaporation")  ||
+          (place == "Mount Shasta" && answer == "True")  ||
+          (place == "Ozark Plateau" && answer == "Erosion")  ||
+          (place == "Niagara Falls" && answer == "1 foot")  ||
+          (place == "Continental Divide" && answer == "Pacific")  ||
+          (place == "Tornado Alley" && answer == "Cold and warm air colliding")  ||
+          (place == "Ogallala Aquafer" && answer == "100 times")  ||
+          (place == "Columbia River Gorge" && answer == "An ice dam")  ||
+          (place == "Chesapeake Bay" && answer == "Fisheries")  ||
+          (place == "San Juan Mountains" && answer == "14,000 foot peaks")  ||
+          (place == "Great Smoky Mountains National Park" && answer == "Water vapor released by trees")  ||
+          (place == "Rocky Mountain National Park" && answer == "Alpine tundra")  ||
+          (place == "Zion National Park" && answer == "2000 ft tall, 20 ft wide")  ||
+          (place == "Olympic National Park" && answer == "14 ft")  ||
+          (place == "Shenandoah National Park" && answer == "They were relocated")  ||
+          (place == "Big Bend National Park" && answer == "Rio Grande")  ||
+          (place == "Other" && answer != "")  ||
+          (place == "GC" && answer == "YES"))
+        return `<span style="color:green;font-weight:bold;font-size:26px;padding-left:10px;">&#10004;</span>`;
+      else // wrong answer
+        return `<span class="red-x" style="font-size:20px;padding-left:10px;">&#10060;</span>`;
     }
 
+    // On page load, fetch field aliases first, then handle globalid param
     window.onload = function() {
-      const globalid = getUrlParam('globalid');
-      if (globalid) {
-        fetchFeature(globalid);
-      }
+      fetchFieldAliases().then(() => {
+        const globalid = getUrlParam('globalid');
+        if (globalid) {
+          fetchFeature(globalid);
+        }
+      });
     };
   </script>
 </body>
